@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# nodejs
-=======
 # Node.js 官方文档中文版
 
 - [Node.js 官方文档（英文原版）](https://nodejs.org/api/)
@@ -21,4 +18,3 @@ https://github.com/jikexueyuanwiki/guide
 2. 引用「images」文件夹时，请使用相对文件路径。
 
 ![Image of Node.js](images/Node.js.png)
->>>>>>> origin/master

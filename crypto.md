@@ -1,21 +1,21 @@
 # 加密-Crypto
 
-    稳定性: 2 - 不稳定; 正在讨论未来版本的 API 变化，会尽量减少重大变化。详见后文。
+    稳定性: 2 - 不稳定; 正在讨论未来版本的 API 改进，会尽量减少重大变化。详见后文。
 
 使用 `require('crypto')` 来访问这个模块。
 
-加密模块提供了 HTTP 或 HTTPS 连接过程中，封装安全凭证的方法。
+加密模块提供了 HTTP 或 HTTPS 连接过程中封装安全凭证的方法。
 
-它也提供了 OpenSSL 的哈希，hmac, cipher,decipher, sign 和 verify 方法的封装。
+它也提供了 OpenSSL 的哈希，hmac, 加密（cipher）, 解密（decipher）, 签名（sign） 和 验证（verify） 方法的封装。
 
 
 ## crypto.setEngine(engine[, flags])
 
 为某些/所有 OpenSSL 函数加载并设置引擎（根据参数 flags 来设置）。
 
-`engine` 可能是 id， 或者是指向引擎共享库的路径。
+`engine` 可能是 id，或者是指向引擎共享库的路径。
 
-`flags` 是可以选参数，默认值是`ENGINE_METHOD_ALL` ，它可以是以下一个多个参数的组合（在`constants`里定义）:
+`flags` 是可选参数，默认值是`ENGINE_METHOD_ALL` ，它可以是以下一个或多个参数的组合（在`constants`里定义）:
 
 * `ENGINE_METHOD_RSA`
 * `ENGINE_METHOD_DSA`
@@ -34,7 +34,7 @@
 
 ## crypto.getCiphers()
 
-返回支持的加密算法的名字数组。
+返回支持的加密算法名数组。
 
 例如：
 
@@ -44,7 +44,7 @@
 
 ## crypto.getHashes()
 
-返回支持的哈希算法的名字数组。
+返回支持的哈希算法名数组。
 
 例如：
 
@@ -55,9 +55,9 @@
 ## crypto.createCredentials(details)
 
     稳定性: 0 - 抛弃. 用 [tls.createSecureContext][] 替换.
-创建一个加密凭证对象，接受一个可选的参数对象:
+根据参数 details，创建一个加密凭证对象。参数为字典，key 包括:
 
-* `pfx` : 字符串或者buffer对象，表示经PFX，或PKCS12编码产生的私钥、证书以及CA证书
+* `pfx` : 字符串或者buffer对象，表示经PFX或PKCS12编码产生的私钥、证书以及CA证书
 * `key` : 进过 PEM 编码的私钥
 * `passphrase` : 私钥或 pfx 的密码
 * `cert` : PEM 编码的证书
@@ -65,15 +65,15 @@
 * `crl` : 字符串或字符串数组，PEM 编码的 CRLs（证书吊销列表Certificate Revocation List）。
 * `ciphers`: 字符串，使用或者排除的加密算法。参见<http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT>。
 
-如果没有指定 'ca' ，node.js将会使用下面列表中的CA<http://mxr.mozilla.org/mozilla/source/security/nss/lib/ckfw/builtins/certdata.txt>.
+如果没有指定 'ca'，Node.js将会使用下面列表中的CA<http://mxr.mozilla.org/mozilla/source/security/nss/lib/ckfw/builtins/certdata.txt>。
 
 
 ## crypto.createHash(algorithm)
 
 创建并返回一个哈希对象，使用指定的算法来生成哈希摘要。
 
-`algorithm` 取决于平台上 OpenSSL 版本所支持的算法。例如，`'sha1'`, `'md5'`,
-`'sha256'`, `'sha512'` 等等。在最近的版本中，`openssllist-message-digest-algorithms` 会显示算法。
+参数 `algorithm` 取决于平台上 OpenSSL 版本所支持的算法。例如，`'sha1'`, `'md5'`,
+`'sha256'`, `'sha512'` 等等。在最近的版本中，`openssllist-message-digest-algorithms` 会显示所有算法。
 
 例如： 这个程序会计算文件的 sha1 的和。
 
@@ -97,30 +97,30 @@
 
 用来生成数据的哈希值。
 
-它是可读写的流 [stream](stream.html) 。写入的数据来用计算哈希值。当写入流结束后，使用 `read()` 方法来获取计算后的哈希值。也支持老的`update` 和 `digest` 方法。
+它是可读写的流 [stream](stream.html) 。写入的数据来用计算哈希值。当写入流结束后，使用 `read()` 方法来获取计算后的哈希值。也支持老的 `update` 和 `digest` 方法。
 
 通过 `crypto.createHash` 返回。
 
 ### hash.update(data[, input_encoding])
 
-根据 `data` 来更新哈希内容，编码方式根据 `input_encoding` 来定，有 `'utf8'`, `'ascii'` or
-`'binary'`。如果没有传入值，默认编码方式是`'binary'`。如果`data` 是 `Buffer`， `input_encoding` 将会被忽略。  
+根据 `data` 来更新哈希内容，编码方式根据 `input_encoding` 来定，有 `'utf8'`, `'ascii'` 或
+`'binary'`。如果没有传入值，默认编码方式是`'binary'`。如果 `data` 是 `Buffer`， `input_encoding` 将会被忽略。  
 
 因为它是流式数据，所以可以使用不同的数据调用很多次。  
 
 ### hash.digest([encoding])
 
-计算传入的数据的哈希摘要。`encoding`可以是 `'hex'`, `'binary'` 或 `'base64'`，如果没有指定`encoding` ，将返回buffer。  
+计算传入的数据的哈希摘要。`encoding` 可以是 `'hex'`, `'binary'` 或 `'base64'`，如果没有指定`encoding` ，将返回buffer。  
 注意：调用  `digest()`  后不能再用 `hash` 对象。
 
 
 ## crypto.createHmac(algorithm, key)
 
-创建并返回一个 hmac 对象，用指定的算法和秘钥生成hmac图谱。
+创建并返回一个 hmac 对象，用指定的算法和秘钥生成 hmac 图谱。
 
-它是可读写的流 [stream](stream.html) 。写入的数据来用计算 hmac。当写入流结束后，使用 `read()` 方法来获取计算后的值。也支持老的`update` 和 `digest` 方法。
+它是可读写的流 [stream](stream.html) 。写入的数据来用计算 hmac。当写入流结束后，使用 `read()` 方法来获取计算后的值。也支持老的 `update` 和 `digest` 方法。
 
-`algorithm` 取决于平台上 OpenSSL 版本所支持的算法，参见前面的 createHash。`key`是 hmac 算法中用的 key。  
+参数 `algorithm` 取决于平台上 OpenSSL 版本所支持的算法，参见前面的 createHash。`key`是 hmac 算法中用的 key。  
 
 ## 类： Hmac
 
@@ -130,25 +130,24 @@
 
 ### hmac.update(data)
 
-根据 `data` 更新hmac对象。因为它是流式数据，所以可以使用新数据调用多次。
+根据 `data` 更新 hmac 对象。因为它是流式数据，所以可以使用新数据调用多次。
 
 ### hmac.digest([encoding])
 
-计算传入数据的 hmac 值。`encoding`可以是 `'hex'`, `'binary'` 或 `'base64'`，如果没有指定`encoding` ，将返回buffer。 
+计算传入数据的 hmac 值。`encoding`可以是 `'hex'`, `'binary'` 或 `'base64'`，如果没有指定`encoding` ，将返回 buffer。 
 
 注意：调用  `digest()`  后不能再用 `hmac` 对象。
 
 
 ## crypto.createCipher(algorithm, password)
 
-使用传入的算法和秘钥，来生成并返回加密对象。    
+使用传入的算法和秘钥来生成并返回加密对象。    
 
-`algorithm` 取决于 OpenSSL，例如`'aes192'`等。最近发布的版本中， `openssl list-cipher-algorithms`将会展示可用的加密算法。  `password` 用来派生 key 和 IV，它必须是一个`'binary'` 编码的字符串或者一个[buffer](buffer.html)。
+`algorithm` 取决于 OpenSSL，例如`'aes192'`等。最近发布的版本中， `openssl list-cipher-algorithms` 将会展示可用的加密算法。`password` 用来派生 key 和 IV，它必须是一个`'binary'` 编码的字符串或者一个[buffer](buffer.html)。
 
 它是可读写的流 [stream](stream.html) 。写入的数据来用计算 hmac。当写入流结束后，使用 `read()` 方法来获取计算后的值。也支持老的`update` 和 `digest` 方法。
 
-注意，OpenSSL 函数[EVP_BytesToKey][]摘要算法如果是一次迭代（one iteration），无需盐值（no salt）的MD5时， `createCipher`为它派生秘钥。缺少盐值使得字典攻击，相同的密码总是生成相同的key，
-底迭代次数和非加密的哈希算法，使得密码测试非常迅速。  
+注意，OpenSSL 函数[EVP_BytesToKey][]摘要算法如果是一次迭代（one iteration），无需盐值（no salt）的 MD5 时， `createCipher` 为它派生秘钥。缺少盐值使得字典攻击，相同的密码总是生成相同的key，低迭代次数和非加密的哈希算法，使得密码测试非常迅速。  
 
 OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf2][] 来派生 key 和 
  iv ，推荐使用 [createCipheriv()][] 来创建加密流。
@@ -158,9 +157,9 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 创建并返回一个加密对象，用指定的算法，key 和 iv。
 
-`algorithm` 参数和 `createCipher()` 一致。  `key` 在算法中用到.  `iv` 是一个[initialization vector](http://en.wikipedia.org/wiki/Initialization_vector).
+`algorithm` 参数和 `createCipher()` 一致。`key` 在算法中用到.`iv` 是一个[initialization vector](http://en.wikipedia.org/wiki/Initialization_vector).
 
-`key` 和 `iv` 必须是 `'binary'` 的 编码字符串或[buffers](buffer.html).
+`key` 和 `iv` 必须是 `'binary'` 的编码字符串或[buffers](buffer.html).
 
 ## 类： Cipher
 
@@ -173,7 +172,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 ### cipher.update(data[, input_encoding][, output_encoding])
 
 根据 `data` 来更新哈希内容，编码方式根据 `input_encoding` 来定，有 `'utf8'`, `'ascii'` or
-`'binary'`。如果没有传入值，默认编码方式是`'binary'`。如果`data` 是 `Buffer`， `input_encoding` 将会被忽略。  
+`'binary'`。如果没有传入值，默认编码方式是`'binary'`。如果`data` 是 `Buffer`，`input_encoding` 将会被忽略。  
 
 `output_encoding` 指定了输出的加密数据的编码格式，它可用是 `'binary'`, `'base64'` 或 `'hex'`。如果没有提供编码，将返回 buffer 。
 
@@ -181,13 +180,13 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 ### cipher.final([output_encoding])
 
-返回加密后的内容，编码方式是由`output_encoding`指定，可以是 `'binary'`, `'base64'` or `'hex'`。如果没有传入值，将返回 buffer。  
+返回加密后的内容，编码方式是由 `output_encoding` 指定，可以是 `'binary'`, `'base64'` 或 `'hex'`。如果没有传入值，将返回 buffer。  
 
 注意：`cipher` 对象不能在 `final()` 方法之后调用。
 
 ### cipher.setAutoPadding(auto_padding=true)
 
-你可以禁用输入数据自动填充到块大小的功能。如果`auto_padding`是false， 那么输入数据的长度必须是加密器块大小的整倍数，否则`final`会失败。这对非标准的填充很有用，例如使用0x0而不是PKCS的填充。这个函数必须在`cipher.final`之前调用。
+你可以禁用输入数据自动填充到块大小的功能。如果 `auto_padding` 是false， 那么输入数据的长度必须是加密器块大小的整倍数，否则 `final` 会失败。这对非标准的填充很有用，例如使用0x0而不是PKCS的填充。这个函数必须在 `cipher.final` 之前调用。
 
 ### cipher.getAuthTag()
 
@@ -217,7 +216,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 用参数 `data` 来更新解密器，它的编码方式是 `'binary'`,`'base64'` 或 `'hex'`。如果没有指定编码方式，则把 `data` 当成 `buffer` 对象。
 
-如果 `data` 是 `Buffer`，则忽略 `input_encoding` 参数.
+如果 `data` 是 `Buffer`，则忽略 `input_encoding` 参数。
 
 参数 `output_decoding` 指定返回文本的格式，`'binary'`, `'ascii'` 或 `'utf8'`。如果没有提供编码格式，则返回 buffer 。
 
@@ -229,7 +228,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 ### decipher.setAutoPadding(auto_padding=true)
 
-如果加密的数据是非标准块，那你可以禁止自动填充，来防止 `decipher.final` 检查并移除。仅在输入数据长度是加密块长度的整数倍的时才有效。你仅能在 `decipher.update` 前调用。
+如果加密的数据是非标准块，那你可以禁止自动填充，来防止 `decipher.final` 检查并移除。仅在输入数据长度是加密块长度的整数倍的时才有效。你必须在 `decipher.update` 前调用。
 
 ### decipher.setAuthTag(buffer)
 
@@ -243,7 +242,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 ## crypto.createSign(algorithm)
 
-根据传入的算法创建并返回一个签名数据。最近的 OpenSSL 版本里，`openssl list-public-key-algorithms`将会展示所有算法，比如`'RSA-SHA256'`.
+根据传入的算法创建并返回一个签名数据。最近的 OpenSSL 版本里，`openssl list-public-key-algorithms` 将会展示所有算法，比如`'RSA-SHA256'`.
 
 ## 类： Sign
 
@@ -251,7 +250,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 通过 `crypto.createSign` 返回。
 
-签名对象是可读写的流[streams](stream.html)。可写数据用来生成签名。当所有的数据写完，`sign`签名方法会返回钱吗。也支持老的`update` 和 `digest` 方法。 
+签名对象是可读写的流[streams](stream.html)。可写数据用来生成签名。当所有的数据写完，`sign`签名方法会返回签名。也支持老的`update` 和 `digest` 方法。 
 
 
 ### sign.update(data)

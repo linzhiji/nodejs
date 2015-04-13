@@ -1,22 +1,22 @@
 # C/C++ 扩展插件
 
-扩展插件 Addons 是动态链接的共享对象. 他提供了 C/C++ 类库能力。这些API比较复杂，他包括已下几个类库:
+扩展插件 Addons 是动态链接的共享对象. 他提供了 C/C++ 类库能力。这些API比较复杂，他包以下几个类库:
 
  - V8 JavaScript,  C++ 类库. 用来和 JavaScript 交互，比如创建对象，调用函数等等。
    在`v8.h` 头文件中 (目录地址`deps/v8/include/v8.h`), 线上地址
    [online](http://izs.me/v8-docs/main.html).
 
- - [libuv](https://github.com/joyent/libuv), C 事件循环库
-   等待文件描述符变为可读，等待定时器，等待信号时，会和 libuv打交道。或者说，如果你需要和 I/O 打交道，就会用到 libuv。
+ - [libuv](https://github.com/joyent/libuv), C 事件循环库。
+   等待文件描述符变为可读，等待定时器，等待信号时，会和 libuv 打交道。或者说，如果你需要和 I/O 打交道，就会用到 libuv。
 
- - 内部 Node 类库。 其中最重要的类 `node::ObjectWrap`，你回经常派生自它。
+ - 内部 Node 类库。 其中最重要的类 `node::ObjectWrap`，你会经常派生自它。
 
- - 其他的 参见 `deps/`。
+ - 其他的参见 `deps/`。
 
 Node 已经将所有的依赖编译成可以执行文件，所以你不必当心这些类库的链接问题。
 
 以下所有例子可以在
-[download](https://github.com/rvagg/node-addon-examples) 下载，也许你可以从重找一个作为你的扩展插件。
+[download](https://github.com/rvagg/node-addon-examples) 下载，也许你可以从中找一个作为你的扩展插件。
 
 ## Hello world
 
@@ -48,11 +48,11 @@ Node 已经将所有的依赖编译成可以执行文件，所以你不必当心
     void Initialize (Handle<Object> exports);
     NODE_MODULE(module_name, Initialize)
 
-`NODE_MODULE` 之后的代码没有分号，因为它不是一个函数 (参见`node.h`).
+`NODE_MODULE` 之后的代码没有分号，因为它不是一个函数 (参见`node.h`)。
 
-`module_name` 必须和二进制文件名字一致 (后缀是 .node)
+`module_name` 必须和二进制文件名字一致 (后缀是 .node)。
 
-源文件会编译成 `addon.node` 二进制插件. 为此我们创建了一个很像 JSON 的 `binding.gyp` 文件， 它包含配置信息，这个文件用[node-gyp](https://github.com/TooTallNate/node-gyp)编译。
+源文件会编译成 `addon.node` 二进制插件。 为此我们创建了一个很像 JSON 的 `binding.gyp` 文件， 它包含配置信息，这个文件用[node-gyp](https://github.com/TooTallNate/node-gyp)编译。
 
     {
       "targets": [
@@ -63,12 +63,12 @@ Node 已经将所有的依赖编译成可以执行文件，所以你不必当心
       ]
     }
 
-下一步创建一个`node-gyp configure`工程在平台上生成这些文件。
+下一步创建一个 `node-gyp configure` 工程，在平台上生成这些文件。
 
 创建后，在`build/`文件夹里拥有一个 `Makefile` (Unix 系统) 文件或者 `vcxproj` 文件
-(Windows 系统)。 接着调用 `node-gyp build`命令编译，生成`.node` 文件! 这些文件在`build/Release/` 目录里。
+(Windows 系统)。 接着调用 `node-gyp build` 命令编译，生成 `.node` 文件。 这些文件在 `build/Release/` 目录里。
 
-现在，你能在 Node 工程中使用这些2进制扩展插件，在 `hello.js` 中声明`require`之前编译的`hello.node`:
+现在，你能在 Node 工程中使用这些 2 进制扩展插件，在 `hello.js` 中声明`require`之前编译的`hello.node`:
 
     // hello.js
     var addon = require('./build/Release/addon');
@@ -80,7 +80,7 @@ Node 已经将所有的依赖编译成可以执行文件，所以你不必当心
 
 ## 插件模式Addon patterns
 
-下面是一些 addon插件的模式，帮助你开始编码。[v8 reference](http://izs.me/v8-docs/main.html) 文档里包含各 v8 的各种接口，[Embedder's Guide](http://code.google.com/apis/v8/embed.html)这个文档包含各种说明，比如 handles, scopes,function templates, 等等。
+下面是一些 addon 插件的模式，帮助你开始编码。[v8 reference](http://izs.me/v8-docs/main.html) 文档里包含 v8 的各种接口，[Embedder's Guide](http://code.google.com/apis/v8/embed.html)这个文档包含各种说明，比如 handles, scopes, function templates, 等等。
 
 在使用这些例子前，你需要先用 `node-gyp` 编译。
 创建`binding.gyp` 文件:
@@ -105,7 +105,7 @@ Node 已经将所有的依赖编译成可以执行文件，所以你不必当心
 
 ### 函数参数 Function arguments
 
-以下模式中解释了如何从 JavaScript 函数中读取参数，并返回结果。仅需要一个`addon.cc`文件:
+从以下模式中解释了如何从 JavaScript 函数中读取参数，并返回结果。仅需要一个`addon.cc`文件:
 
     // addon.cc
     #include <node.h>
@@ -140,7 +140,7 @@ Node 已经将所有的依赖编译成可以执行文件，所以你不必当心
 
     NODE_MODULE(addon, Init)
 
-You can test it with the following JavaScript snippet:
+可以用以下的 JavaScript 代码片段测试：
 
     // test.js
     var addon = require('./build/Release/addon');
@@ -150,7 +150,7 @@ You can test it with the following JavaScript snippet:
 
 ### 回调Callbacks
 
-你也能传递 JavaScript 函数给 C++ 函数，并执行它。 在 `addon.cc` 中:
+你也能传 JavaScript 函数给 C++ 函数，并执行它。 在 `addon.cc` 中:
 
     // addon.cc
     #include <node.h>
@@ -173,7 +173,7 @@ You can test it with the following JavaScript snippet:
 
     NODE_MODULE(addon, Init)
 
-注意，这个例子中使用了 `Init()` 里的2个参数，`module`对象是第二个参数。它允许 addon 使用一个函数完全重写 `exports`。
+注意，这个例子中使用了 `Init()` 里的 2 个参数，`module`对象是第二个参数。它允许 addon 使用一个函数完全重写 `exports`。
 
 可以用以下的代码来测试：
 
@@ -187,7 +187,7 @@ You can test it with the following JavaScript snippet:
 
 ### 对象工厂Object factory
 
-在`addon.cc`模式里，你能用 C++ 函数创建并返回一个新的对象，这个对象包含的 `msg` 属性是由`createObject()` 函数传入:
+在 `addon.cc` 模式里，你能用 C++ 函数创建并返回一个新的对象，这个对象所包含的 `msg` 属性是由`createObject()` 函数传入:
 
     // addon.cc
     #include <node.h>
@@ -254,7 +254,7 @@ You can test it with the following JavaScript snippet:
 
     NODE_MODULE(addon, Init)
 
-To test:
+测试:
 
     // test.js
     var addon = require('./build/Release/addon');
@@ -304,7 +304,7 @@ To test:
 
     #endif
 
-在 `myobject.cc` 中实现各种暴露的方法，这里通过给构造函数添加prototype属性来暴露 `plusOne` 方法:
+在 `myobject.cc` 中实现各种暴露的方法，通过给构造函数添加 prototype 属性来暴露 `plusOne` 方法:
 
     // myobject.cc
     #include "myobject.h"
@@ -376,7 +376,7 @@ To test:
 
 ### 包装对象工厂 Factory of wrapped objects
 
-当你想创建本地对象，又不想在 JavaScript 中 严格的使用 `new` 初始化的时候，以下方法非常实用.
+当你想创建本地对象，又不想在 JavaScript 中严格的使用 `new` 初始化的时候，以下方法非常实用。
 
     var obj = addon.createObject();
     // instead of:
@@ -555,7 +555,7 @@ To test:
 
     NODE_MODULE(addon, InitAll)
 
-介绍 `myobject.h` 里的一个公开方法，它能再解包后使用私有变量:
+介绍 `myobject.h` 里的一个公开方法，它能在解包后使用私有变量:
 
     // myobject.h
     #ifndef MYOBJECT_H

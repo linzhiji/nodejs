@@ -2,7 +2,7 @@
 
     稳定性: 3 - 稳定
 
-HTTPS 是建立在 HTTP 之上的协议。在 Node 是单独的模块。
+HTTPS 是建立在 HTTP 之上的协议。在 Node 里是单独的模块。
 
 ## 类: https.Server
 

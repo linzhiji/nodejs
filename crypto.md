@@ -110,7 +110,7 @@
 
 ### hash.digest([encoding])
 
-计算传入的数据的哈希摘要。`encoding` 可以是 `'hex'`, `'binary'` 或 `'base64'`，如果没有指定`encoding` ，将返回buffer。  
+计算传入的数据的哈希摘要。`encoding` 可以是 `'hex'`, `'binary'` 或 `'base64'`，如果没有指定`encoding` ，将返回 buffer。  
 注意：调用  `digest()`  后不能再用 `hash` 对象。
 
 
@@ -214,35 +214,35 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 ### decipher.update(data[, input_encoding][, output_encoding])
 
-用参数 `data` 来更新解密器，它的编码方式是 `'binary'`,`'base64'` 或 `'hex'`。如果没有指定编码方式，则把 `data` 当成 `buffer` 对象。
+使用参数 `data` 更新需要解密的内容，其编码方式是 `'binary'`,`'base64'` 或 `'hex'`。如果没有指定编码方式，则把 `data` 当成 `buffer` 对象。
 
 如果 `data` 是 `Buffer`，则忽略 `input_encoding` 参数。
 
-参数 `output_decoding` 指定返回文本的格式，`'binary'`, `'ascii'` 或 `'utf8'`。如果没有提供编码格式，则返回 buffer 。
+参数 `output_decoding` 指定返回文本的格式，是 `'binary'`, `'ascii'` 或 `'utf8'` 之一。如果没有提供编码格式，则返回 buffer。
 
 ### decipher.final([output_encoding])
 
-返回剩余的解密内容，`output_encoding` 是 `'binary'`, `'ascii'` 或 `'utf8'`，如果没有指定，则返回 buffer。
+返回剩余的解密过的内容，参数 `output_encoding` 是 `'binary'`, `'ascii'` 或 `'utf8'`，如果没有指定编码方式，返回 buffer。
 
 注意，`decipher`对象不能在 `final()` 方法之后使用。
 
 ### decipher.setAutoPadding(auto_padding=true)
 
-如果加密的数据是非标准块，那你可以禁止自动填充，来防止 `decipher.final` 检查并移除。仅在输入数据长度是加密块长度的整数倍的时才有效。你必须在 `decipher.update` 前调用。
+如果加密的数据是非标准块，可以禁止其自动填充，防止 `decipher.final` 检查并移除。仅在输入数据长度是加密块长度的整数倍的时才有效。你必须在 `decipher.update` 前调用。
 
 ### decipher.setAuthTag(buffer)
 
-对于加密认证模式（目前支持：GCM），这个方法必须用来传递接收到的 _认证标志_ 。如果没有提供标志或者密文被篡改，将会抛出 `final` 标志，认证失败，密文会被被抛弃，
+对于加密认证模式（目前支持：GCM），必须用这个方法来传递接收到的_认证标志_。如果没有提供标志，或者密文被篡改，将会抛出 `final` 标志，认证失败，密文会被抛弃，
 
 
 ### decipher.setAAD(buffer)
 
-对于加密认证模式（目前支持：GCM），这个方法设置附加认证数据（ AAD ）。
+对于加密认证模式（目前支持：GCM），用这个方法设置附加认证数据（ AAD ）。
 
 
 ## crypto.createSign(algorithm)
 
-根据传入的算法创建并返回一个签名数据。最近的 OpenSSL 版本里，`openssl list-public-key-algorithms` 将会展示所有算法，比如`'RSA-SHA256'`.
+根据传入的算法创建并返回一个签名数据。 OpenSSL 的最近版本里，`openssl list-public-key-algorithms` 会列出所有算法，比如`'RSA-SHA256'`。
 
 ## 类： Sign
 
@@ -250,32 +250,32 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 通过 `crypto.createSign` 返回。
 
-签名对象是可读写的流[streams](stream.html)。可写数据用来生成签名。当所有的数据写完，`sign`签名方法会返回签名。也支持老的`update` 和 `digest` 方法。 
+签名对象是可读写的流 [streams](stream.html)。可写数据用来生成签名。当所有的数据写完，`sign` 签名方法会返回签名。也支持老的 `update` 和 `digest` 方法。 
 
 
 ### sign.update(data)
 
-用参数 `data` 来更新签名对象。因为是流式数据，它可以根据新数据多次调用。
+用参数 `data` 来更新签名对象。因为是流式数据，它可以被多次调用。
 
 ### sign.sign(private_key[, output_format])
 
-根据所有传送给sign的更新数据来计算电子签名。  
+根据传送给sign的数据来计算电子签名。  
   
-`private_key`可以是一个对象或者字符串。如果是字符串，将会被当做没有没骂的key。
+`private_key` 可以是一个对象或者字符串。如果是字符串，将会被当做没有密码的key。
 
 `private_key`:
 
 * `key` : 包含 PEM 编码的私钥
 * `passphrase` : 私钥的密码
 
-返回值`output_format` 包含数字签名， 格式是 `'binary'`,`'hex'` 或 `'base64'`.如果没有指定`encoding` ，将返回buffer。  
+返回值`output_format` 包含数字签名， 格式是 `'binary'`,`'hex'` 或 `'base64'` 之一。如果没有指定 `encoding` ，将返回 buffer。  
   
 注意：`sign` 对象不能在 `sign()` 方法之后调用。
 
 
 ## crypto.createVerify(algorithm)
 
-根据传入的算法，创建并返回验证对象。是上面签名对象（signing object）的镜像。
+根据传入的算法，创建并返回验证对象。是签名对象（signing object）的镜像。
 
 ## 类： Verify
 
@@ -283,17 +283,17 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 通过 `crypto.createVerify` 返回。
 
-是可写流 [streams](stream.html). 可写数据用来验证签名。一旦所有数据写完后，如签名正确，`verify` 方法会返回 `true` 。  
+是可写流 [streams](stream.html)。可写数据用来验证签名。一旦所有数据写完后，如签名正确 `verify` 方法会返回 `true` 。  
   
-也支持老的`update`方法
+也支持老的 `update` 方法。
 
 ### verifier.update(data)
 
-用参数 `data` 来更新验证对象。因为是流式数据，它可以根据新数据多次调用。
+用参数 `data` 来更新验证对象。因为是流式数据，它可以被多次调用。
 
 ### verifier.verify(object, signature[, signature_format])
 
-使用 `object` 和  `signature`.验证签名数据。参数`object` 是包含了 PEM编码对象的字符串，它可以是 RSA 公钥, DSA 公钥, 或 X.509 证书。`signature` 是之前计算出来的数字签名。`signature_format` 可以是 `'binary'`, `'hex'` 或 `'base64'`，如果没有指定编码方式 ，则默认是buffer 对象。 
+使用 `object` 和  `signature` 验证签名数据。参数 `object` 是包含了 PEM 编码对象的字符串，它可以是 RSA 公钥, DSA 公钥, 或 X.509 证书。`signature` 是之前计算出来的数字签名。`signature_format` 可以是 `'binary'`, `'hex'` 或 `'base64'` 之一，如果没有指定编码方式 ，则默认是buffer 对象。 
 
 根据数据和公钥验证签名有效性，来返回 true 或 false。  
 
@@ -301,7 +301,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 ## crypto.createDiffieHellman(prime_length[, generator])
 
-创建一个 Diffie-Hellman 密钥交换(Diffie-Hellman key exchange)对象，并根据给定的位长度生成一个质数。如果没有指定参数 `generator` ，默认为 `2`。
+创建一个 Diffie-Hellman 密钥交换(Diffie-Hellman key exchange)对象，并根据给定的位长度生成一个质数。如果没有指定参数 `generator`，默认为 `2`。
 
 ## crypto.createDiffieHellman(prime[, prime_encoding][, generator][, generator_encoding])
 
@@ -315,7 +315,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
   
 如果没有指定 `prime_encoding`， 则 Buffer 为 `prime`。
   
-如果没有指定 `generator_encoding` ，则 Buffer 为  `generator`。
+如果没有指定 `generator_encoding` ，则 Buffer 为 `generator`。
 
 ## 类： DiffieHellman
 
@@ -335,39 +335,39 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 ### diffieHellman.generateKeys([encoding])
 
 生成秘钥和公钥，并返回指定格式的公钥。这个值必须传给其他部分。编码方式： `'binary'`, `'hex'`,
-或 `'base64'`。如果没有指定编码方式 ，将返回buffer。 
+或 `'base64'`。如果没有指定编码方式，将返回 buffer。 
 
 
 ### diffieHellman.computeSecret(other_public_key[, input_encoding][, output_encoding])
 
-以`other_public_key` 作为第三方公钥计算共享秘密，并返回。秘钥会以`input_encoding`来解读。编码是：`'binary'`, `'hex'`, 或 `'base64'`。如果没有指定编码方式 ，默认buffer。   
+使用 `other_public_key` 作为第三方公钥来计算并返回共享秘密（shared secret）。秘钥用`input_encoding` 编码。编码方式为：`'binary'`, `'hex'`, 或 `'base64'`。如果没有指定编码方式 ，默认为 buffer。   
   
-如果没有指定返回编码方式 ，将返回buffer。
+如果没有指定返回编码方式，将返回 buffer。
 
 ### diffieHellman.getPrime([encoding])
 
-以特定格式返回 Diffie-Hellman 质数，格式为: `'binary'`, `'hex'`, or `'base64'`. 如果没有指定编码方式 ，将返回buffer。
+用参数 encoding 指明的编码方式返回 Diffie-Hellman 质数，编码方式为: `'binary'`, `'hex'`, 或 `'base64'`。 如果没有指定编码方式，将返回 buffer。
 
 ### diffieHellman.getGenerator([encoding])
 
-以特定格式返回 Diffie-Hellman 生成器，格式为: `'binary'`, `'hex'`, or `'base64'`. 如果没有指定编码方式 ，将返回buffer。
+用参数 encoding 指明的编码方式返回 Diffie-Hellman 生成器，编码方式为: `'binary'`, `'hex'`, 或 `'base64'`. 如果没有指定编码方式 ，将返回 buffer。
 
 ### diffieHellman.getPublicKey([encoding])
 
-以特定格式返回 Diffie-Hellman 公钥，格式为: `'binary'`, `'hex'`, or `'base64'`. 如果没有指定编码方式 ，将返回buffer。  
+用参数 encoding 指明的编码方式返回 Diffie-Hellman 公钥，编码方式为: `'binary'`, `'hex'`, 或 `'base64'`. 如果没有指定编码方式 ，将返回 buffer。  
 
 ### diffieHellman.getPrivateKey([encoding])
 
-以特定格式返回 Diffie-Hellman 私钥，格式为: `'binary'`, `'hex'`, or `'base64'`. 如果没有指定编码方式 ，将返回buffer。 
+用参数 encoding 指明的编码方式返回 Diffie-Hellman 私钥，编码方式为: `'binary'`, `'hex'`, 或 `'base64'`. 如果没有指定编码方式 ，将返回 buffer。 
 
 
 ### diffieHellman.setPublicKey(public_key[, encoding])
 
-设置 Diffie-Hellman 的公钥，格式为: `'binary'`, `'hex'`, or `'base64'`，如果没有指定编码方式 ，默认为 buffer。 
+设置 Diffie-Hellman 的公钥，编码方式为: `'binary'`, `'hex'`, 或 `'base64'`，如果没有指定编码方式 ，默认为 buffer。 
 
 ### diffieHellman.setPrivateKey(private_key[, encoding])
 
-设置 Diffie-Hellman 的私钥，格式为: `'binary'`, `'hex'`, or `'base64'`，如果没有指定编码方式 ，默认为 buffer。 
+设置 Diffie-Hellman 的私钥，编码方式为: `'binary'`, `'hex'`, 或 `'base64'`，如果没有指定编码方式 ，默认为 buffer。 
 
 ## crypto.getDiffieHellman(group_name)
 
@@ -403,34 +403,34 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 参数 `format` 是 `'compressed'`, `'uncompressed'`, 或 `'hybrid'`. 如果没有指定，将返回`'uncompressed'` 格式.
 
-参数`encoding`是 `'binary'`, `'hex'`, 或 `'base64'`. 如果没有指定编码方式 ，将返回buffer。 
+参数`encoding`是 `'binary'`, `'hex'`, 或 `'base64'`. 如果没有指定编码方式 ，将返回 buffer。 
 
 
 ### ECDH.computeSecret(other_public_key[, input_encoding][, output_encoding])
   
-以`other_public_key` 作为第三方公钥计算共享秘密，并返回。秘钥会以`input_encoding`来解读。编码是：`'binary'`, `'hex'`, 或 `'base64'`。如果没有指定编码方式 ，默认buffer。   
+以`other_public_key` 作为第三方公钥计算共享秘密，并返回。秘钥会以`input_encoding`来解读。编码是：`'binary'`, `'hex'`, 或 `'base64'`。如果没有指定编码方式 ，默认为 buffer。   
   
-如果没有指定编码方式 ，将返回buffer。
+如果没有指定编码方式 ，将返回 buffer。
 
 ### ECDH.getPublicKey([encoding[, format]])
   
-以特定格式返回 EC Diffie-Hellman 公钥，格式为: `'compressed'`, `'uncompressed'`, or
+用参数 encoding 指明的编码方式返回 EC Diffie-Hellman 公钥，编码方式为: `'compressed'`, `'uncompressed'`, 或
 `'hybrid'`. 如果没有指定编码方式 ，将返回`'uncompressed'` 。
  
-编码是：`'binary'`, `'hex'`, 或 `'base64'`。如果没有指定编码方式 ，默认buffer。   
+编码是：`'binary'`, `'hex'`, 或 `'base64'`。如果没有指定编码方式 ，默认为 buffer。   
 
 
 ### ECDH.getPrivateKey([encoding])
 
-以特定格式返回 EC Diffie-Hellman 私钥，编码是：`'binary'`, `'hex'`, 或 `'base64'`。如果没有指定编码方式 ，默认buffer。
+用参数 encoding 指明的编码方式返回 EC Diffie-Hellman 私钥，编码是：`'binary'`, `'hex'`, 或 `'base64'`。如果没有指定编码方式 ，默认为 buffer。
 
 ### ECDH.setPublicKey(public_key[, encoding])
 
-设置  EC Diffie-Hellman 的公钥，格式为: `'binary'`, `'hex'`, or `'base64'`，如果没有指定编码方式 ，默认为 buffer。
+设置  EC Diffie-Hellman 的公钥，编码方式为: `'binary'`, `'hex'`, 或 `'base64'`，如果没有指定编码方式 ，默认为 buffer。
 
 ### ECDH.setPrivateKey(private_key[, encoding])
 
-设置  EC Diffie-Hellman 的私钥，格式为: `'binary'`, `'hex'`, or `'base64'`，如果没有指定编码方式 ，默认为 buffer。
+设置  EC Diffie-Hellman 的私钥，编码方式为: `'binary'`, `'hex'`, 或 `'base64'`，如果没有指定编码方式 ，默认为 buffer。
 
 例如 (包含一个共享秘密):
 
@@ -449,7 +449,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 ## crypto.pbkdf2(password, salt, iterations, keylen[, digest], callback)
 
-异步PBKDF2提供了一个伪随机函数 HMAC-SHA1，根据给定密码的长度，salt和iterations来得出一个密钥。回调函数得到两个参数 (err, derivedKey)。
+异步 PBKDF2 提供了一个伪随机函数 HMAC-SHA1，根据给定密码的长度，salt 和 iterations 来得出一个密钥。回调函数得到两个参数 (err, derivedKey)。
 
 例如：
 
@@ -459,7 +459,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
       console.log(key.toString('hex'));  // 'c5e478d...1469e50'
     });
 
-在[crypto.getHashes()](#crypto_crypto_gethashes)有支持的摘要函数列表.
+在 [crypto.getHashes()](#crypto_crypto_gethashes) 里有支持的摘要函数列表。
 
 ## crypto.pbkdf2Sync(password, salt, iterations, keylen[, digest])
 
@@ -484,7 +484,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
       // most likely, entropy sources are drained
     }
 
-注意：如果没有足够积累的熵来生成随机强度的密码，将会抛出错误或调用回调函数返回错误。换句话说，没有回调函数的 `crypto.randomBytes` 不会阻塞，即使耗尽所有的熵。
+注意：如果没有足够积累的熵来生成随机强度的密码，将会抛出错误，或调用回调函数返回错误。换句话说，没有回调函数的 `crypto.randomBytes` 不会阻塞，即使耗尽所有的熵。
 
 ## crypto.pseudoRandomBytes(size[, callback])
 
@@ -543,14 +543,14 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
 
 ## crypto.DEFAULT_ENCODING
 
-函数所用的编码方式可以是字符串或 buffer ，默认值是'buffer'。这是为了让加密模块与默认'binary'为编码方式的遗留程序更容易兼容。
+函数所用的编码方式可以是字符串或 buffer ，默认值是 'buffer'。这是为了加密模块兼容默认 'binary' 为编码方式的遗留程序。
 
-注意，新程序希望用buffer对象，所以请暂时使用这个。
+注意，新程序希望用 buffer 对象，所以这是暂时手段。
 
 
 ## Recent API Changes
 
-在统一的流API概念出现前，在引入Buffer对象来处理二进制数据之前，Crypto模块就被添加到Node。    
+在统一的流 API 概念出现前，在引入 Buffer 对象来处理二进制数据之前，Crypto 模块就已经添加到 Node。    
   
 因此，流相关的类里没有其他的 Node 类里的典型方法，并且很多方法接收并返回二级制编码的字符串，而不是 Buffers。在最近的版本中，这些函数改成默认使用 Buffers。
 	
@@ -558,7 +558,7 @@ OpenSSL推荐使用 pbkdf2 来替换 EVP_BytesToKey，推荐使用 [crypto.pbkdf
   
 例如，如果你使用默认参数给签名类，将结果返回给认证类，中间没有验证数据，程序会正常工作。之前你会得到二进制编码的字符串，并传递给验证类，现在则是 Buffer。
   
-如果你之前使用的字符串数据在 Buffers 对象不能正常工作（比如，连接数据，并存储在数据库里 ）。或者你传递了二进制字符串给加密函数，但是没有指定编码方式，现在就需要提供编码参数。如果想切换回原来的风格，将 `crypto.DEFAULT_ENCODING` 设置为  'binary'。注意，新的程序会希望是 buffers,所以之前的方法只能作为临时的办法。
+如果你之前使用的字符串数据在 Buffers 对象不能正常工作（比如，连接数据，并存储在数据库里 ）。或者你传递了二进制字符串给加密函数，但是没有指定编码方式，现在就需要提供编码参数。如果想切换回原来的风格，将 `crypto.DEFAULT_ENCODING` 设置为  'binary'。注意，新的程序希望是 buffers,所以之前的方法只能作为临时的办法。
 
 
 [createCipher()]: #crypto_crypto_createcipher_algorithm_password

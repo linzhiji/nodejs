@@ -77,7 +77,7 @@
 
  `connectListener`  参数将会作为监听器添加到['connect'][]事件上。
 
-下面是一个上述应答服务器的客户端例子：
+下面是一个用上述方法应答服务器的客户端例子：
 
     var net = require('net');
     var client = net.connect({port: 8124},
@@ -93,22 +93,22 @@
       console.log('disconnected from server');
     });
 
-要连接到 socket  `/tmp/echo.sock`，仅需将第二行代码改为：
+要连接到 socket `/tmp/echo.sock`，仅需将第二行代码改为：
 
     var client = net.connect({path: '/tmp/echo.sock'});
 
 ## net.connect(port[, host][, connectListener])
 ## net.createConnection(port[, host][, connectListener])
 
-创建一个到端口 `port` 和 主机 `host`的 TCP 连接。如果忽略主机 `host`，则假定为`'localhost'`。参数 `connectListener` 将会作为监听器添加到['connect'][] 事件。
+创建一个到端口 `port` 和 主机 `host`的 TCP 连接。如果忽略主机 `host`，则假定为`'localhost'`。参数 `connectListener` 将会作为监听器添加到 ['connect'][] 事件。
 
 这是工厂方法，返回一个新的 ['net.Socket'](#net_class_net_socket)。
 
 ## net.connect(path[, connectListener])
 ## net.createConnection(path[, connectListener])
 
-创建到 `path`的 unix socket 连接。
-参数 `connectListener` 将会作为监听器添加到['connect'][] 事件。
+创建到 `path` 的 unix socket 连接。
+参数 `connectListener` 将会作为监听器添加到 ['connect'][] 事件上。
 
 这是工厂方法，返回一个新的 ['net.Socket'](#net_class_net_socket)。
 
@@ -118,12 +118,11 @@
 
 ### server.listen(port[, host][, backlog][, callback])
 
-开始接受指定 端口 `port` 和 主机 `host` 的连接。如果忽略主机 `host`， 服务器将会接受任何IPv4 地址(`INADDR_ANY`)的直接连接。端口为0，则会分配一个随机端口。
+开始接受指定端口 `port` 和 主机 `host` 的连接。如果忽略主机 `host`， 服务器将会接受任何 IPv4 地址(`INADDR_ANY`)的直接连接。端口为 0，则会分配一个随机端口。
 
-  
 积压量（Backlog）为连接等待队列的最大长度。实际长度由您的操作系统通过 sysctl 设定，比如 linux 上的`tcp_max_syn_backlog` 和 `somaxconn`。这个参数默认值是 511 (不是 512)。  
 
-这是异步函数。当服务器被绑定时会触发 ['listening'][] 事件。最后一个参数 `callback`将会作为['listening'][] 事件的监听器。
+这是异步函数。当服务器被绑定时会触发 ['listening'][] 事件。最后一个参数 `callback` 将会作为['listening'][] 事件的监听器。
 
 有些用户会遇到 `EADDRINUSE` 错误，它表示另外一个服务器已经运行在所请求的端口上。处理这个情况的办法是等一段事件再重试：
 
@@ -147,13 +146,13 @@
 
 启动一个本地 socket 服务器，监听指定 `path` 的连接。
 
-这是异步函数。当服务器已经被绑定，将会触发['listening'][]  事件。最后一个参数 `callback`将会作为['listening'][] 事件的监听器。
+这是异步函数。绑定服务器后，会触发 ['listening'][] 事件。最后一个参数 `callback` 将会作为['listening'][] 事件的监听器。
 
 
-UNIX上，本地域通常默认为 UNIX 域。参数 `path` 是文件系统路径，就和创建文件时一样，它也遵从命名规则和权限检查，并且在文件系统里可见，并持续到关联关闭。
+UNIX 上，本地域通常默认为 UNIX 域。参数 `path` 是文件系统路径，就和创建文件时一样，它也遵从命名规则和权限检查，并且在文件系统里可见，并持续到关闭关联。
 
 
-Windows上，本地域通过命名管道实现。路径必须是以`\\?\pipe\` or `\\.\pipe\`入口。任意字符串都可以，不过之后进行相同的管道命名处理，比如解决 `..` 序列。管道命名空间是平的。管道不会一直持久，当最后一个引用关闭的时候，管道将会移除。不要忘记 javascript 字符字符串转义要求路径使用双反斜杠，比如：
+Windows上，本地域通过命名管道实现。路径必须是以 `\\?\pipe\` 或 `\\.\pipe\` 入口。任意字符串都可以，不过之后进行相同的管道命名处理，比如解决 `..` 序列。管道命名空间是平的。管道不会一直持久，当最后一个引用关闭的时候，管道将会移除。不要忘记 javascript 字符字符串转义要求路径使用双反斜杠，比如：
 
     net.createServer().listen(
         path.join('\\\\?\\pipe', process.cwd(), 'myctl'))
@@ -165,11 +164,11 @@ Windows上，本地域通过命名管道实现。路径必须是以`\\?\pipe\` o
 
  `handle` 对象可以设置成 server 或 socket（任意以下划线 `_handle` 开头的成员），或者是 `{fd: <n>}` 对象。
 
-这将是服务器用指定的句柄接收连接，但它假设文件描述符或句柄已经绑定到端口或域 socket。
+这将是服务器用指定的句柄接收连接，前提是文件描述符或句柄已经绑定到端口或域 socket。
 
 Windows 不支持监听文件句柄。
 
-这是异步函数。当服务器已经被绑定，将会触发['listening'][]  事件。最后一个参数 `callback`将会作为['listening'][] 事件的监听器。
+这是异步函数。当服务器已经被绑定，将会触发['listening'][]  事件。最后一个参数 `callback` 将会作为 ['listening'][] 事件的监听器。
 
 ### server.listen(options[, callback])
 
@@ -183,7 +182,7 @@ Windows 不支持监听文件句柄。
 
 `options` 的属性：端口 `port`, 主机 `host`, 和 `backlog`, 以及可选参数 callback 函数, 他们在一起调用[server.listen(port, \[host\], \[backlog\], \[callback\])](#net_server_listen_port_host_backlog_callback)。还有，参数 `path` 可以用来指定 UNIX socket。
 
-如果参数 `exclusive` 是`false`（默认值），集群进程将会使用同一个句柄，允许连接共享。当参数`exclusive` 是`true`时，句柄不会共享，如果共享端口会返回错误。监听独家端口例子如下：  
+如果参数 `exclusive` 是`false`（默认值），集群进程将会使用同一个句柄，允许连接共享。当参数`exclusive` 是 `true` 时，句柄不会共享，如果共享端口会返回错误。监听独家端口例子如下：  
 
     server.listen({
       host: 'localhost',
@@ -193,11 +192,11 @@ Windows 不支持监听文件句柄。
 
 ### server.close([callback])
 
-服务器停止接收新的连接，保持现在连接。这是异步函数，当所有连接结束的时候服务器最终会关闭，并会触发 `'close'` 事件。你可以传一个回调函数来监听 `'close'` 事件。如果存在，将会调用回调函数，潜在的错误作为唯一的参数。
+服务器停止接收新的连接，保持现有连接。这是异步函数，当所有连接结束的时候服务器会关闭，并会触发 `'close'` 事件。你可以传一个回调函数来监听 `'close'` 事件。如果存在，将会调用回调函数，错误（如果有）作为唯一参数。
 
 ### server.address()
 
-操作系统返回绑定的地址，协议族名和服务器端口。查找哪个端口已经被系统绑定时，非常有用。返回的对象有3个属性，比如。
+操作系统返回绑定的地址，协议族名和服务器端口。查找哪个端口已经被系统绑定时，非常有用。返回的对象有3个属性，比如：
 `{ port: 12346, family: 'IPv4', address: '127.0.0.1' }`
 
 例如:
@@ -212,7 +211,7 @@ Windows 不支持监听文件句柄。
       console.log("opened server on %j", address);
     });
 
-在 `'listening'` 事件触发前，不要调用 `server.address()`.
+在 `'listening'` 事件触发前，不要调用 `server.address()`。
 
 ### server.unref()
 
@@ -224,22 +223,22 @@ Windows 不支持监听文件句柄。
 
 ### server.maxConnections
 
-设置这个选项后，当服务器连接数超过数量时拒绝连接。
+设置这个选项后，当服务器连接数超过数量时拒绝新连接。
 
-这个选项不推荐使用在 socket  已经用 `child_process.fork()`发送给子进程。
+一旦已经用 `child_process.fork()` 方法将 socket 发送给子进程， 就不推荐使用这个选项。
 
 ### server.connections
 
-这个函数已经被抛弃。请用 [server.getConnections()][] 代替。服务器上当前连接的数量。
+已经抛弃这个函数。请用 [server.getConnections()][] 代替。服务器上当前连接的数量。
 
-当调用 `child_process.fork()` 发送一个 socket 给子进程时，它将变为 `null` 。 要轮询子进程来获取当前活动的连接的数量请用 `server.getConnections` 代替.
+当调用 `child_process.fork()` 发送一个 socket 给子进程时，它将变为 `null` 。 要轮询子进程来获取当前活动连接的数量，请用 `server.getConnections` 代替.
 
 
 ### server.getConnections(callback)
 
-异步获取服务器当前活跃的连接的数量。当 socket 发送给子进程时工作。
+异步获取服务器当前活跃连接的数量。当 socket 发送给子进程后才有效；  
 
-回调函数有2个参数 `err` 和 `count`.
+回调函数有 2 个参数 `err` 和 `count`。
 
 `net.Server` 是事件分发器 [EventEmitter][]， 有以下事件:
 
@@ -261,11 +260,11 @@ Windows 不支持监听文件句柄。
 
 * {Error Object}
 
-发生错误时触发。'close' 事件将被下列事件直接调用。 请查看 `server.listen`  例子。
+发生错误时触发。'close' 事件将被下列事件直接调用。请查看 `server.listen`  例子。
 
 ## Class: net.Socket
 
-这个对象是TCP或UNIX套接字的抽象。`net.Socket` 实例实现了一个双工流接口。 他们可以在客户端(使用 connect())被用户创建使用, 或者它们可以由 Node 创建，并通过 `connection` 服务器事件传递给用户。
+这个对象是 TCP 或 UNIX Socket 的抽象。`net.Socket` 实例实现了一个双工流接口。 他们可以在用户创建客户端(使用 connect())时使用, 或者由 Node 创建它们，并通过 `connection` 服务器事件传递给用户。
 
 ### new net.Socket([options])
 
@@ -284,22 +283,22 @@ Windows 不支持监听文件句柄。
 ### socket.connect(port[, host][, connectListener])
 ### socket.connect(path[, connectListener])
 
-使用传入的 socket 打一个连接。如果指定了 端口 `port` 和 主机 `host`，socket 将被 TCP socket打开。如果参数 `host` 忽略，默认为 `localhost`。如果指定了 `path` ，socket 将会被指定路径的 unix socket 打开。
+使用传入的 socket 打开一个连接。如果指定了端口 `port` 和 主机 `host`，TCP socket 将打开 socket 。如果忽略参数 `host`，则默认为 `localhost`。如果指定了 `path` ，socket 将会被指定路径的 unix socket 打开。
 
-通常情况不需要使用这个函数，比如使用 `net.createConnection` 打开socket。只有你实现了自己的 socket 才会用到。
+通常情况不需要使用这个函数，比如使用 `net.createConnection` 打开 socket。只有你实现了自己的 socket 时才会用到。
 
 
 这是异步函数。当 ['connect'][] 事件被触发时， socket 已经建立。如果这是问题连接， `'connect'` 事件不会被触发， 将会抛出 `'error'`事件。
   
-参数 `connectListener` 将会作为监听器添加到['connect'][] 事件。
+参数 `connectListener` 将会作为监听器添加到 ['connect'][] 事件。
 
 
 ### socket.bufferSize
 
-是 `net.Socket` 的一个属性，用于 `socket.write()` 。帮助用户获取更快的运行速度。计算机不能一直处于大量数据写入状态--网络连接可能太慢。Node 在内部会将排队数据写入到socket，并在网络可用时发送。（内部实现：轮询 socket 的文件描述符等待变为可写）。
+是 `net.Socket` 的一个属性，用于 `socket.write()` 。帮助用户获取更快的运行速度。计算机不能一直处于写入大量数据状态--网络连接可能太慢。Node 在内部会将排队数据写入到socket，并在网络可用时发送。（内部实现：轮询 socket 的文件描述符直到变为可写）。
 
 
-这种内部缓冲的缺点是内存使用量会增加。这个属性表示当前准备写的缓冲字符数。（字符的数量等于准备写入的字节的数量，但是缓冲区可能包含字符串，这些字符串是惰性编码的，所以准确的字节数还无法知道）。
+这种内部缓冲的缺点是会增加内存使用量。这个属性表示当前准备写的缓冲字符数。（字符的数量等于准备写入的字节的数量，但是缓冲区可能包含字符串，这些字符串是惰性编码的，所以准确的字节数还无法知道）。
 
 遇到很大增长很快的 `bufferSize` 时，用户可用尝试用`pause()` 和 `resume()`来控制字符流。
 
@@ -312,13 +311,13 @@ Windows 不支持监听文件句柄。
 
 在 socket 上发送数据。第二个参数指定了字符串的编码，默认是 UTF8 编码。
 
-如果所有数据成功刷新到内核缓冲区，返回  `true`。如果数据全部或部分在用户内存里，返回 `false` 。当缓冲区为空的时候会触发`'drain'` 。
+如果所有数据成功刷新到内核缓冲区，返回  `true`。如果数据全部或部分在用户内存里，返回 `false` 。当缓冲区为空的时候会触发 `'drain'` 。
 
 当数据最终被完整写入的的时候，可选的 `callback` 参数会被执行，但不一定会马上执行。
 
 ### socket.end([data][, encoding])
 
-半关闭 socket.例如，它发送一个 FIN 包。可能服务器任在发送数据。
+半关闭 socket。例如，它发送一个 FIN 包。可能服务器仍在发送数据。
 
 如果参数 `data` 不为空，等同于调用 `socket.write(data, encoding)` 后再调用 `socket.end()`。
 
@@ -342,21 +341,21 @@ socket 闲置时间超过 `timeout` 毫秒后 ，将 socket 设置为超时。
 
 如果 `timeout` = 0, 那么现有的闲置超时会被禁用
 
-可选的callback参数将会被添加成为'timeout'事件的一次性监听器。
+可选的 callback 参数将会被添加成为 'timeout' 事件的一次性监听器。
 
 ### socket.setNoDelay([noDelay])
 
-禁用纳格（Nagle）算法。默认情况下TCP连接使用纳格算法，在发送前他们会缓冲数据。将 `noDelay` 设置为 `true` 将会在调用 `socket.write()` 时立即发送数据。`noDelay` 默认值为 `true`。
+禁用纳格（Nagle）算法。默认情况下 TCP 连接使用纳格算法，在发送前他们会缓冲数据。将 `noDelay` 设置为 `true` 将会在调用 `socket.write()` 时立即发送数据。`noDelay` 默认值为 `true`。
 
 ### socket.setKeepAlive([enable][, initialDelay])
 
-禁用/启用长连接功能，并在第一个在闲置 socket  上的长连接probe被发送之前，可选地设定初始延时。enable默认为false。
+禁用/启用长连接功能，并在发送第一个在闲置 socket 上的长连接 probe 之前，可选地设定初始延时。默认为 false。
 
 设定 `initialDelay` （毫秒），来设定收到的最后一个数据包和第一个长连接probe之间的延时。将 initialDelay 设为0，将会保留默认（或者之前）的值。默认值为0.
 
 ### socket.address()
   
-操作系统返回绑定的地址，协议族名和服务器端口。返回的对象有3 个属性，比如`{ port: 12346, family: 'IPv4', address: '127.0.0.1' }`。
+操作系统返回绑定的地址，协议族名和服务器端口。返回的对象有 3 个属性，比如`{ port: 12346, family: 'IPv4', address: '127.0.0.1' }`。
 
 ### socket.unref()
 
@@ -419,12 +418,12 @@ socket 闲置时间超过 `timeout` 毫秒后 ，将 socket 设置为超时。
 
 当 socket 另一端发送 FIN 包时，触发该事件。
 
-默认情况下(`allowHalfOpen == false`)，一旦 socket 将队列里的数据写完毕，socket 将会销毁它的文件描述符。如果 `allowHalfOpen == true`,socket 不会从它这边自动调用end()，使得用户可以随意写入数据，而让用户端自己调用end()。
+默认情况下(`allowHalfOpen == false`)，一旦 socket 将队列里的数据写完毕，socket 将会销毁它的文件描述符。如果 `allowHalfOpen == true`,socket 不会从它这边自动调用 end()，使的用户可以随意写入数据，而让用户端自己调用 end()。
 
 
 ### 事件： 'timeout'
 
-当 socket 空闲超时时触发，仅是表明 socket  已经空闲。用户必须手动关闭连接。
+当 socket 空闲超时时触发，仅是表明 socket 已经空闲。用户必须手动关闭连接。
 
 参见 : `socket.setTimeout()`
 
@@ -440,14 +439,12 @@ socket 闲置时间超过 `timeout` 毫秒后 ，将 socket 设置为超时。
 * {Error object}
 
 错误发生时触发。以下事件将会直接触发 `'close'` 事件。
-Emitted when an error occurs.  The `'close'` event will be called directly
-following this event.
 
 ### 事件： 'close'
 
 * `had_error` {Boolean} 如果 socket 传输错误，为 `true`
 
-当 socket 完全关闭时触发。参数 `had_error`是 boolean，它表示是否因为传输错误导致 socket 关闭。
+当 socket 完全关闭时触发。参数 `had_error` 是 boolean，它表示是否因为传输错误导致 socket 关闭。
 
 ## net.isIP(input)
 

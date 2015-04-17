@@ -1,10 +1,10 @@
 # HTTP
 
     稳定性: 3 - 稳定
+  
+通过调用 `require('http')`， 可以使用 HTTP 服务器或客户端功能。  
 
-必须用 `require('http')` 来使用 HTTP 服务器或客户端功能。  
-
-Node 里的 HTTP 接口支持原本比较难用的协议的特性。特别是很大的，或块编码的消息。这些接口不会完全缓存整个请求或响应，这样用户才能使用数据量。
+Node 里的 HTTP 接口支持协议里原本比较难用的特性。特别是很大的或块编码的消息。这些接口不会完全缓存整个请求或响应，这样用户可以在请求或响应中使用数据流。
 
 
 HTTP消息头对象和下面的例子类似：  
@@ -17,11 +17,11 @@ HTTP消息头对象和下面的例子类似：
 
 Keys 都是小写，值不能修改。
 
-为了能支持尽可能多得HTTP应用程序，node 提供的 HTTP api接口都是底层的。仅能处理流和消息。它把消息解析成报文头和报文体，但是不解析实际的报文头和报文体内容。
+为了能支持尽可能多的 HTTP 应用程序，Node 提供的 HTTP API 接口都是底层的。仅能处理流和消息。它把消息解析成报文头和报文体，但是不解析实际的报文头和报文体内容。
 
 定义报文头的时候，多个值间可用 `,` 分隔。除了 `set-cookie` 和 `cookie` 头，因为它们表示值的数组。诸如 `content-length` 的只有一个值的报文头，直接解析，并且只有单值可以表示成已经解析好的对象。
 
-接收到得原始头信息以数组（`[key, value, key2, value2, ...]`）的形式保存在 `rawHeaders`里。例如，之前提到的消息对象会有如下的 `rawHeaders`：
+接收到的原始头信息以数组（`[key, value, key2, value2, ...]`）的形式保存在 `rawHeaders` 里。例如，之前提到的消息对象会有如下的 `rawHeaders`：
 
     [ 'ConTent-Length', '123456',
       'content-LENGTH', '123',
@@ -41,8 +41,7 @@ Keys 都是小写，值不能修改。
 
 * {Object}
 
-全部标准 HTTP 响应状态码的和描述的集合。例如，`http.STATUS_CODES[404] === 'Not
-Found'`。
+全部标准 HTTP 响应状态码的和描述的集合。例如，`http.STATUS_CODES[404] === 'Not Found'`。
 
 ## http.createServer([requestListener])
 
@@ -52,7 +51,7 @@ Found'`。
 
 ## http.createClient([port][, host])
 
-这个函数已经抛弃，用 [http.request()][] 替换。创建一个新的 HTTP 客户端，连接到服务器的 `port` 和 `host` 。
+这个函数已经被抛弃，用 [http.request()][] 替换。创建一个新的 HTTP 客户端，连接到服务器的 `port` 和 `host` 。
 
 ## 类： http.Server
 
@@ -68,7 +67,7 @@ Found'`。
 
 `function (socket) { }`
 
-当新的 TCP 流建立的时候。 `socket` 是一个 `net.Socket` 对象。通常用户不会访问这个事件。协议解析器绑定套接字时采用的方式使套接字不会出发readable事件。也能通过 `request.connection`访问 `socket`。
+当建立新的 TCP 流的时候。 `socket` 是一个 `net.Socket` 对象。通常用户不会访问这个事件。协议解析器绑定套接字时采用的方式使套接字不会出发 readable 事件。也能通过 `request.connection` 访问 `socket`。
 
 ### 事件： 'close'
 
@@ -80,35 +79,35 @@ Found'`。
 
 `function (request, response) { }`
 
-当 http 收到 100-continue 的http请求时会触发。如果没有监听这个事件，服务器将会自动发送100 Continue 的响应。
+当 http 收到 100-continue 的 http 请求时会触发。如果没有监听这个事件，服务器将会自动发送 100 Continue 的响应。
 
 如果客户端需要继续发送请求主题，或者生成合适的 HTTP 响应（如，400 请求无效），可以通过调用 [response.writeContinue()][] 来处理。
 
-注意：当触发并处理这个事件的时候，不会触发 `request` 事件。 
+注意：触发并处理这个事件的时候，不会再触发 `request` 事件。 
 
 ### 事件： 'connect'
 
 `function (request, socket, head) { }`
 
-当客户端请求 http 连接方法的时候触发。如果没有监听这个对象，客户端请求一个连接的时候会被关闭。
+当客户端请求 http 连接时触发。如果没有监听这个事件，客户端请求连接的时候会被关闭。
 
 * `request` 是 http 请求的参数，与 request 事件参数相同。
 * `socket` 是服务器和客户端间的 socket。
 * `head` 是 buffer 的实例。网络隧道的第一个包，可能为空。
 
-这个事件触发后，请求的 socket 请求的不会有  `data` 事件监听器，也就是说你需要绑定一个监听器到 `data` 上，来处理在发送到服务器上的socket。
+这个事件触发后，请求的 socket 不会有  `data` 事件监听器，也就是说你需要绑定一个监听器到 `data` 上，来处理在发送到服务器上的 socket 数据。
 
 ### 事件： 'upgrade'
 
 `function (request, socket, head) { }`
 
-当客户端请求 http upgrage 时候会触发。如果没有监听这个对象，客户端请求一个连接的时候会被关闭。
+当客户端请求 http upgrage 时候会触发。如果没有监听这个事件，客户端请求一个连接的时候会被关闭。
 
 * `request`  是 http 请求的参数，与 request 事件参数相同。
 * `socket` 是服务器和客户端间的 socket。
 * `head` 是 buffer 的实例。网络隧道的第一个包，可能为空。
 
-这个事件触发后，请求的 socket 请求的不会有  `data` 事件监听器，也就是说你需要绑定一个监听器到 `data` 上，来处理在发送到服务器上的socket。
+这个事件触发后，请求的 socket 不会有  `data` 事件监听器，也就是说你需要绑定一个监听器到 `data` 上，来处理在发送到服务器上的 socket 数据。
 
 ### 事件： 'clientError'
 
@@ -121,11 +120,11 @@ Found'`。
 
 ### server.listen(port[, hostname][, backlog][, callback])
 
-在指定的的端口和主机名上开始接收连接。 如果忽略主机名，服务器将会接收指向任意IPv4的地址(`INADDR_ANY`)。
+在指定的的端口和主机名上开始接收连接。 如果忽略主机名，服务器将会接收指向任意 IPv4 的地址(`INADDR_ANY`)。
 
 监听一个 unix socket，需要提供一个文件名而不是主机名和端口。
 
-积压量 backlog 为连接等待队列的最大长度。实际的长度由你的操作系统的 sysctl 设置决定（比如 linux 上的 `tcp_max_syn_backlog` and `somaxconn`）。默认参数值为 511 (not 512)
+积压量 backlog 为等待连接队列的最大长度。实际的长度由你的操作系统的 sysctl 设置决定（比如 linux 上的 `tcp_max_syn_backlog` and `somaxconn`）。默认参数值为 511 (不是 512)
 
 这是异步函数。最后一个参数 `callback` 会作为事件监听器添加到 `listening` 事件。参见[net.Server.listen(port)][]。
 
@@ -145,11 +144,11 @@ Found'`。
 
  `handle` 对象可以是 server 或 socket（任意以下划线 `_handle`开头的成员），或者`{fd: <n>}`对象。
 
-这会使得 server 用指定的句柄接收连接，前提是文件描述符或句柄已经连接到端口或域socket。
+这会导致 server 用参数 `handle` 接收连接，前提条件是文件描述符或句柄已经连接到端口或域 socket。
 
-Windows 不支持监听文件句柄。  
+Windows 不能监听文件句柄。  
 
-这是异步函数。最后一个参数 `callback` 会作为事件监听器添加到 `listening`事件。参见[net.Server.listen(port)][]。
+这是异步函数。最后一个参数 `callback` 会作为事件监听器添加到 `listening` 事件。参见[net.Server.listen(port)][]。
 
 ### server.close([callback])
 
@@ -158,7 +157,7 @@ Windows 不支持监听文件句柄。
 
 ### server.maxHeadersCount
 
-最大请求头的数量限制，默认1000。如果设置为 0，则代表不做任何限制。
+最大请求头的数量限制，默认 1000。如果设置为 0，则不做任何限制。
 
 ### server.setTimeout(msecs, callback)
 
@@ -167,9 +166,9 @@ Windows 不支持监听文件句柄。
 
 为 socket 设置超时时间，单位为毫秒，如果发生超时，在 server 对象上触发 `'timeout'` 事件，参数为 socket 。
 
-如果在 Server 对象上有一个 `'timeout'` 事件监听器，超时的时候，将会被调用，参数为 socket 。
+如果在 Server 对象上有一个 `'timeout'` 事件监听器，超时的时候，将会调用它，参数为 socket 。
 
-默认情况下，Server 的超时为2分钟，如果超时将会销毁 socket。如果你给 Server 的超时事件设置了回调函数，那你就得负责处理 socket 超时。
+默认情况下，Server 的超时为 2 分钟，如果超时将会销毁 socket。如果你给 Server 的超时事件设置了回调函数，那你就得负责处理 socket 超时。
 
 
 ### server.timeout
@@ -178,9 +177,9 @@ Windows 不支持监听文件句柄。
 
 超时的时长，单位为毫秒。
 
-注意，socket 的超时逻辑在连接时设定，所以，仅在新连接来的时候才能改变这个值。
+注意，socket 的超时逻辑在连接时设定，所以有新的连接时才能改变这个值。
 
-设置为 0时， 限制建立连接的自动超时将失效。
+设为 0 时，建立连接的自动超时将失效。
 
 ## 类： http.ServerResponse
 
@@ -198,17 +197,17 @@ Windows 不支持监听文件句柄。
 
 `function () { }`
 
-发送响应时触发。当响应头和响应体最后一段被剥离给操作系统通过网络来传输时被触发。这并不代表客户端已经收到数据。
+发送完响应触发。响应头和响应体最后一段数据被剥离给操作系统后，通过网络来传输时被触发。这并不代表客户端已经收到数据。
 
 这个事件之后，响应对象不会再触发任何事件。
 
 ### response.writeContinue()
 
-发送 HTTP/1.1 100 Continue 消息给客户端，表示请求体可以发送。 可以在服务器上查看 ['checkContinue'][].
+发送 HTTP/1.1 100 Continue 消息给客户端，表示请求体可以发送。可以在服务器上查看['checkContinue'][] 事件。
 
 ### response.writeHead(statusCode[, statusMessage][, headers])
 
-发送一个响应头给请求。状态码是3位数字，如 `404`。最后一个参数 `headers` 是响应头。建议第二个参数设置为可以看的懂的消息。
+发送一个响应头给请求。状态码是 3 位数字，如 `404`。最后一个参数 `headers` 是响应头。建议第二个参数设置为可以看的懂的消息。
 
 例如:
 
@@ -219,43 +218,43 @@ Windows 不支持监听文件句柄。
 
 这个方法仅能在消息中调用一次，而且必须在 [response.end()][] 前调用。
 
-如果你在调用 [response.write()][] 或 [response.end()][] 前调这个函数,将会计算出不稳定的头，并且为你调用这个函数。
+如果你在这之前调用 [response.write()][] 或 [response.end()][],将会计算出不稳定的头。
 
-Content-Length 是 bytes 数，而不是字符数。上面的例子`'hello world'`仅包含一个 byte 字符。如果 body 包含高级编码的字符， `Buffer.byteLength()`就必须确定指定编码的字符数。Node 不会检查Content-Length 和 body 的长度是否相同。
+Content-Length 是字节数，而不是字符数。上面的例子 `'hello world'` 仅包含一个字节字符。如果 body 包含高级编码的字符， `Buffer.byteLength()` 就必须确定指定编码的字符数。Node 不会检查Content-Length 和 body 的长度是否相同。
 
 ### response.setTimeout(msecs, callback)
 
 * `msecs` {Number}
 * `callback` {Function}
 
-为 socket 设置超时时间，单位为毫秒。如果提供了回调函数，将会在 response 对象的 `'timeout'` 事件上添加监听器。  
+设置 socket 超时时间，单位为毫秒。如果提供了回调函数，将会在 response 对象的 `'timeout'` 事件上添加监听器。  
 
-如果没有给请求, 响应, 服务器添加`'timeout'` 监视器，超时的时候将会 socket 销毁。如果给请求, 响应, 服务器加了处理函数，你就需要负责处理 socket 的超时。
+如果没有给请求、响应、服务器添加 `'timeout'` 监视器，超时的时候将会销毁 socket。如果你给请求、响应、服务器加了处理函数，就需要负责处理 socket 超时。
 
 ### response.statusCode
 
-当使用默认的 headers 时（没有显式的调用 [response.writeHead()][] ），这个属性控制了将要发送给客户端状态码。
+使用默认的 headers 时（没有显式的调用 [response.writeHead()][] ），这个属性表示将要发送给客户端状态码。
 
 例如:
 
     response.statusCode = 404;
 
-当响应头发送给客户端的时候，这个属性表示状态码已经发送。
+响应头发送给客户端的后，这个属性表示状态码已经发送。
 
 ### response.statusMessage
 
 
-当使用默认的 headers 时（没有显式的调用 [response.writeHead()][] ）, 这个属性控制了将要发送给客户端状态码。 如果这个没有定义，将会使用状态码的标准消息
+使用默认 headers 时（没有显式的调用 [response.writeHead()][] ）, 这个属性表示将要发送给客户端状态信息。 如果这个没有定义，将会使用状态码的标准消息。
 
 例如:
 
     response.statusMessage = 'Not found';
 
-当响应头发送给客户端的时候，这个属性表示状态码已经发送。
+当响应头发送给客户端的时候，这个属性表示状态消息已经发送。
 
 ### response.setHeader(name, value)
 
-为默认的头设置一条单独的头内容。如果这个头即将被发送，内容会被替换。如果我想设置更多的头， 就使用一个相同名字的字符串数组。
+设置默认头某个字段内容。如果这个头即将被发送，内容会被替换。如果你想设置更多的头， 就使用一个相同名字的字符串数组。
 
 例如:
 
@@ -267,11 +266,11 @@ Content-Length 是 bytes 数，而不是字符数。上面的例子`'hello world
 
 ### response.headersSent
 
-Boolean (只读)。如果headers发送完毕,则为true,反之为false
+Boolean (只读)。如果headers发送完毕,则为 true,反之为 false。
 
 ### response.sendDate
 
-默认值为true。若为true,当headers里没有Date值时，自动生成Date并发送。
+默认值为 true。若为 true,当 headers 里没有 Date 值时，自动生成 Date 并发送。
 
 只有在测试环境才能禁用; 因为 HTTP 要求响应包含 Date 头.
 
@@ -294,26 +293,25 @@ Boolean (只读)。如果headers发送完毕,则为true,反之为false
 
 ### response.write(chunk[, encoding][, callback])
 
-如果这个方法被调用，而 [response.writeHead()][]没有被调用，它将会切换到默认的 header，并更新这个header。
+如果调用了这个方法，且还没有调用 [response.writeHead()][]，将会切换到默认的 header，并更新这个header。
 
-将发送响应体数据块。这个方法可能会多次调用，来提供成功的body部分内容。
+这个方法将发送响应体数据块。可能会多次调用这个方法，以提供 body 成功的部分内容。
 
-`chunk` 可以是字符串或 buffer。如果 `chunk` 是字符串，第二个参数表明如何将它编码成 byte 流。`encoding` 的默认值是`'utf8'`。最后一个参数在这个数据库被刷新时调用。
+`chunk` 可以是字符串或 buffer。如果 `chunk` 是字符串，第二个参数表明如何将它编码成字节 流。`encoding` 的默认值是`'utf8'`。最后一个参数在刷新这个数据块时调用。
 
-注意：这个是原始的 HTTP body，高级的多部分 body 编码无法使用。
+注意：这个是原始的 HTTP body，和高级的multi-part body 编码无关。
 
-第一次调用`response.write()` 的时候，将会发送缓存的头信息和第一个body给客户端。第二次，将会调用`response.write()`。Node 认为你将会独立发送流数据。及时说，响应缓存在第一个数据块中。
+第一次调用 `response.write()` 的时候，将会发送缓存的头信息和第一个 body 给客户端。第二次，将会调用 `response.write()`。Node 认为你将会独立发送流数据。这意味着，响应缓存在第一个数据块中。
 
-如果全部数据成功的刷新到内核缓冲区，返回`true` 。如果部分或全部数据还在用户内存中还处于队列状况，返回 `false` 。当缓存再次释放的时候，将会触发 `'drain'`。
+如果成功的刷新全部数据到内核缓冲区，返回 `true` 。如果部分或全部数据在用户内存中还处于排队状况，返回 `false` 。当缓存再次释放的时候，将会触发 `'drain'`。
 
 ### response.addTrailers(headers)
 
-这个方法添加 HTTP 的尾部 header（消息末尾的 header）给响应。
+这个方法给响应添加 HTTP 的尾部 header（消息末尾的 header）。
 
-**只有**数据块编码用于响应体时，才会触发Trailers；如果不是（例如，请求是HTTP/1.0），它们将会被自动丢弃。
+**只有**数据块编码用于响应体时，才会触发 Trailers；如果不是（例如，请求是HTTP/1.0），它们将会被自动丢弃。
 
-如果你想触发 trailers， HTTP 会请求 用来发送的 `Trailer`，它包含一些信息，比如：
-Note that HTTP requires the `Trailer` header to be sent if you intend to
+如果你想触发 trailers， HTTP 会要求发送 `Trailer` 头，它包含一些信息，比如：
 
     response.writeHead(200, { 'Content-Type': 'text/plain',
                               'Trailer': 'Content-MD5' });
@@ -324,7 +322,7 @@ Note that HTTP requires the `Trailer` header to be sent if you intend to
 
 ### response.end([data][, encoding][, callback])
 
-这个方法告诉服务器，所有的响应头和响应体已经发送；服务器可以认为消息结束。`response.end()`方法必须在每个响应中调用。
+这个方法告诉服务器，所有的响应头和响应体已经发送；服务器可以认为消息结束。`response.end()` 方法必须在每个响应中调用。
 
 如果指定了参数 `data`，将会在响应流结束的时候调用。
 
@@ -390,9 +388,9 @@ http.request() 返回一个 http.ClientRequest类的实例。ClientRequest实例
     req.write(postData);
     req.end();
 
-注意，例子里调用了  `req.end()`。`http.request()` 必须调用 `req.end()` 来表明请求已经完成，即使没有数据写入到 请求 body 里。
+注意，例子里调用了 `req.end()`。`http.request()` 必须调用 `req.end()` 来表明请求已经完成，即使没有数据写入到请求 body 里。
 
-如果在请求的时候遇到错误（DNS解析、TCP级别的错误或实际HTTP解析错误），在返回的请求对象时会触发一个'error'事件。
+如果在请求的时候遇到错误（DNS 解析、TCP 级别的错误或实际 HTTP 解析错误），在返回的请求对象时会触发一个 'error' 事件。
 
 有一些特殊的头需要注意：
 
@@ -401,7 +399,7 @@ http.request() 返回一个 http.ClientRequest类的实例。ClientRequest实例
 
 * 发送 `Content-length` 头将会禁用chunked编码。
 
-* 发送一个 `Expect` 头，会立即发送请求头，一般来说，发送 `Expect: 100-continue` ,你必须设置超时，并监听 `continue` 事件. 更多细节参见 RFC2616 Section 8.2.3 。
+* 发送一个 `Expect` 头，会立即发送请求头，一般来说，发送 `Expect: 100-continue` ,你必须设置超时，并监听 `continue` 事件。更多细节参见 RFC2616 Section 8.2.3 。
 
 * 发送一个授权头，将会使用 `auth` 参数重写，来计算基本的授权。
   
@@ -423,11 +421,11 @@ http.request() 返回一个 http.ClientRequest类的实例。ClientRequest实例
 
 HTTP Agent 用于 socket 池，用于 HTTP 客户端请求。
 
-HTTP Agent 也把客户端请求默认为使用 Connection:keep-alive 。如果没有HTTP请求正在等待成为空闲的 socket 的话，那么 socket 将关闭。这意味着，Node 的资源池在负载的情况下对 keep-alive 有利，但是仍然不需要开发人员使用 KeepAlive 来手动关闭 HTTP 客户端。
+HTTP Agent 也把客户端请求默认为使用 Connection:keep-alive 。如果没有 HTTP 请求正在等着成为空闲 socket 的话，那么 socket 将关闭。这意味着，Node 的资源池在负载的情况下对 keep-alive 有利，但是仍然不需要开发人员使用 KeepAlive 来手动关闭 HTTP 客户端。
  
-如果你选择使用 HTTP KeepAlive， 可以创建一个 Agent 对象，将 flag 设置为 `true`.  (参见下面的 [constructor options](#http_new_agent_options) ) ，这样 Agent 会把没用到得 socket 放到池里，以便将来使用。他们会被显式的标志，以便不保持 Node 的运行。但是，当它不再使用的时候，显式的调用[`destroy()`](#http_agent_destroy)任然是一个好办法，这样 socket 将会被关闭。
+如果你选择使用 HTTP KeepAlive， 可以创建一个 Agent 对象，将 flag 设置为 `true`.  (参见下面的 [constructor options](#http_new_agent_options) ) ，这样 Agent 会把没用到的 socket 放到池里，以便将来使用。他们会被显式的标志，让 Node 不运行。但是，当不再使用它的时候，需要显式的调用[`destroy()`](#http_agent_destroy)，这样 socket 将会被关闭。
 
-当 socket 事件触发  `close`  事件或特殊的 `agentRemove` 事件时，socket 将会从 agent 池里移除。这意味着，如果你要保持 HTTP 请求保持长时间打开，并且不希望他们在池里，可以参考以下代码：
+当 socket 事件触发  `close`  事件或特殊的 `agentRemove` 事件时，socket 将会从 agent 池里移除。如果你要保持 HTTP 请求保持长时间打开，并且不希望他们在池里，可以参考以下代码：
 
     http.get(options, function(res) {
       // Do stuff
@@ -435,7 +433,7 @@ HTTP Agent 也把客户端请求默认为使用 Connection:keep-alive 。如果�
       socket.emit("agentRemove");
     });
 
-另外，你可以使用 `agent:false` 选择完全停用资源池：
+另外，你可以使用 `agent:false` 让资源池停用：
 
     http.get({
       hostname: 'localhost',
@@ -449,13 +447,13 @@ HTTP Agent 也把客户端请求默认为使用 Connection:keep-alive 。如果�
 ### new Agent([options])
 
 * `options` {Object} agent 上的设置选项集合，有以下字段内容:
-  * `keepAlive` {Boolean} 持资源池周围的socket，用于未来其它请求。默认值为`false`。
-  * `keepAliveMsecs` {Integer} 使用HTTP KeepAlive 的时候，通过正在保持活动的sockets发送TCP KeepAlive包的频繁程度。默认值为1000。仅当 keepAlive 为 true 时才相关。.】
-  * `maxSockets` {Number} 在空闲状态下,还依然开启的 socket 的最大值。仅当 `keepAlive` 设置为true 的时候有效。默认值为256。
+  * `keepAlive` {Boolean} 持资源池周围的 socket，用于未来其它请求。默认值为 `false`。
+  * `keepAliveMsecs` {Integer} 使用 HTTP KeepAlive 的时候，通过正在保持活动的 sockets 发送 TCP KeepAlive 包的频繁程度。默认值为 1000。仅当 keepAlive 为 true 时才相关。.】
+  * `maxSockets` {Number} 在空闲状态下,还依然开启的 socket 的最大值。仅当 `keepAlive` 设置为 true 的时候有效。默认值为 256。
 
 被  `http.request` 使用的默认的 `http.globalAgent` ,会设置全部的值为默认。
 
-你必须创建你的 `Agent`  对象，才能配置这些值。
+必须在创建你自己的 `Agent`  对象后，才能配置这些值。
 
 ```javascript
 var http = require('http');
@@ -466,23 +464,23 @@ http.request(options, onResponseCallback);
 
 ### agent.maxSockets
 
-默认值为 Infinity。决定了每台主机上的 agent 可以拥有的并发套接字的打开数量，主机可以是 `host:port` 或 `host:port:localAddress`。
+默认值为 Infinity。决定了每台主机上的 agent 可以拥有的并发 socket 的打开数量，主机可以是 `host:port` 或 `host:port:localAddress`。
 
 ### agent.maxFreeSockets
 
-默认值 256.  对于支持 HTTP KeepAlive 的 Agent，这设置了空闲状态下仍然打开的套接字数目的最大值。 
+默认值 256.  对于支持 HTTP KeepAlive 的 Agent 而言，这个方法设置了空闲状态下仍然打开的套接字数的最大值。 
 
 ### agent.sockets
 
-一个保存当前被 Agent 使用的 socket 数组的对象。不要修改它。
+这个对象包含了当前 Agent 使用中的 socket 数组。不要修改它。
 
 ### agent.freeSockets
 
-使用 HTTP KeepAlive 的时候，一个保存当前被 Agent 使用的 socket 数组的对象。不要修改它。
+使用 HTTP KeepAlive 的时候，这个对象包含等待当前 Agent 使用的 socket 数组。不要修改它。
 
 ### agent.requests
 
-一个保存还没分配给 socket 的请求数组的对象。不要修改它。
+这个对象包含了还没分配给 socket 的请求数组。不要修改它。
 
 ### agent.destroy()
 
@@ -493,12 +491,12 @@ http.request(options, onResponseCallback);
 
 ### agent.getName(options)
 
-获取一组请求选项的唯一名，来确定某个连接是否可用。在 http agent里，它会返回 `host:port:localAddress`。在 http agent里， name 包括CA，cert, ciphers, 和其他 HTTPS/TLS 特殊选项来决定 socket 是否可以重用。
+获取一组请求选项的唯一名，来确定某个连接是否可重用。在 http agent 里，它会返回 `host:port:localAddress`。在 http agent 里， name 包括 CA，cert, ciphers, 和其他 HTTPS/TLS 特殊选项来决定 socket 是否可以重用。
 
 
 ## http.globalAgent
 
-Agent 的全局实例，是http客户端的默认请求。
+Agent 的全局实例，是 http 客户端的默认请求。
 
 
 ## 类： http.ClientRequest
@@ -509,10 +507,10 @@ Agent 的全局实例，是http客户端的默认请求。
 
 在  `'response'` 事件期间，可以给响应对象添加监视器，监听 `'data'` 事件。
 
-如果没有添加 `'response'` 处理函数，响应将被完全忽略。然而，如果你添加了 `'response'` 事件处理函数，那你 **必须** 消费掉从响应对象来的数据，可以在 `'readable'` 事件里调用 `response.read()` ，或者添加一个  `'data'` 处理函数，或者调用  `.resume()`  方法。如果数据未被读取，它将会消耗内存，最终产生 `process out of memory` 错误。
+如果没有添加 `'response'` 处理函数，响应将被完全忽略。如果你添加了 `'response'` 事件处理函数，那你 **必须** 消费掉从响应对象获取的数据，可以在 `'readable'` 事件里调用 `response.read()` ，或者添加一个  `'data'` 处理函数，或者调用  `.resume()`  方法。如果未读取数据，它将会消耗内存，最终产生 `process out of memory` 错误。
 
 
-Node 不会检查Content-Length 和 body 的长度是否相同。
+Node 不会检查 Content-Length 和 body 的长度是否相同。
 
 该请求实现了 [Writable Stream][] 接口。这是一个包含下列事件的 [EventEmitter][]。
 
@@ -645,13 +643,13 @@ Socket 附加到这个请求的时候触发。
 
 `function () { }`
 
-当服务器发送 '100 Continue'  HTTP 响应的时候触发，通常因为请求包含'Expect: 100-continue'。该指令表示客户端应发送请求体。
+当服务器发送 '100 Continue'  HTTP 响应的时候触发，通常因为请求包含 'Expect: 100-continue'。该指令表示客户端应发送请求体。
 
 ### request.flushHeaders()
 
 刷新请求的头。
 
-考虑效率因素，node.js 通常缓存请求的头直到你调用 `request.end()`，或写入请求的第一个数据块。然后，包装请求的头和数据到一个独立的 TCP 包里。
+考虑效率因素，Node.js 通常会缓存请求的头直到你调用 `request.end()`，或写入请求的第一个数据块。然后，包装请求的头和数据到一个独立的 TCP 包里。
 
 
 ### request.write(chunk[, encoding][, callback])
@@ -677,7 +675,6 @@ Socket 附加到这个请求的时候触发。
 ### request.setTimeout(timeout[, callback])
 
 如果 socket 被分配给这个请求，并完成连接，将会调用 [socket.setTimeout()][] 。
-Once a socket is assigned to this request and is connected
 
 ### request.setNoDelay([noDelay])
 
@@ -703,16 +700,15 @@ Once a socket is assigned to this request and is connected
 
 ### message.httpVersion
 
-客户端向服务器发送请求时，客户端发送的 HTTP 版本；或者服务器想客户端返回应答时，服务器的 HTTP 版本。通常是  `'1.1'` 或 `'1.0'` 。
+客户端向服务器发送请求时，客户端发送的 HTTP 版本；或者服务器想客户端返回应答时，服务器的 HTTP 版本。通常是 `'1.1'` 或 `'1.0'` 。
 
 另外， `response.httpVersionMajor` 是第一个整数，`response.httpVersionMinor` 是第二个整数。
 
 ### message.headers
 
-请求/响应 头对象。
+请求/响应头对象。
 
 只读的头名称和值的映射。头的名字是小写，比如：
-例如：
 
     // Prints something like:
     //
@@ -723,7 +719,7 @@ Once a socket is assigned to this request and is connected
 
 ### message.rawHeaders
 
-接收到得请求/响应头字段列表。
+接收到的请求/响应头字段列表。
 
 注意，键和值在同一个列表中。它并非一个元组列表。所以，偶数偏移量为键，奇数偏移量为对应的值。
 

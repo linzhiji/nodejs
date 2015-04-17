@@ -4,7 +4,7 @@
 
 <!-- type=misc -->
 
-V8 提供了强大的调试工具，可以通过 [TCP protocol](http://code.google.com/p/v8/wiki/DebuggerProtocol) 从外部访问。Node 内置这个调试工具内置的客户端。要使用这个调试器，以`debug`参数启动 Node，出现提示：
+V8 提供了强大的调试工具，可以通过 [TCP protocol](http://code.google.com/p/v8/wiki/DebuggerProtocol) 从外部访问。Node 内置这个调试工具客户端。要使用这个调试器，以`debug`参数启动 Node，出现提示：
 
     % node debug myscript.js
     < debugger listening on port 5858
@@ -15,7 +15,7 @@ V8 提供了强大的调试工具，可以通过 [TCP protocol](http://code.goog
       3   debugger;
     debug>
 
-Node 的调试器不支持所有的命令，但是简单的步进和检查还是可以的。在代码里嵌入   `debugger;`，可以设置断点。
+Node 的调试器不支持所有的命令，但是简单的步进和检查还是可以的。在代码里嵌入 `debugger;`，可以设置断点。
 
 例如,  `myscript.js` 代码如下：
 
@@ -69,17 +69,17 @@ Node 的调试器不支持所有的命令，但是简单的步进和检查还是
     %
 
 
- `repl` 命令能执行远程代码； `next` 能步进到下一行。此外可以输入 `help` 查看哪些命令可用。
+ `repl` 命令能执行远程代码；`next` 能步进到下一行。此外可以输入 `help` 查看哪些命令可用。
 
-## 监视器Watchers
+## 监视器-Watchers
 
-调试的时候可以查看表达式和便利。每个断点处，监视器都会显示上下文。  
+调试的时候可以查看表达式和变量。每个断点处，监视器都会显示上下文。  
 
-输入  `watch("my_expression")` 开始监视表达式， `watchers`显示活跃的监视器。输入`unwatch("my_expression")`可以移除监视器。  
+输入  `watch("my_expression")` 开始监视表达式，`watchers` 显示活跃的监视器。输入`unwatch("my_expression")` 可以移除监视器。  
 
-## 命令参考Commands reference
+## 命令参考-Commands reference
 
-### 步进Stepping
+### 步进-Stepping
 
 * `cont`, `c` - 继续执行
 * `next`, `n` - Step next
@@ -126,6 +126,7 @@ Node 的调试器不支持所有的命令，但是简单的步进和检查还是
 * `unwatch(expr)` - 从监视列表里删除表达式
 * `watchers` - 显示所有的监视器和它们的值（每个断点都会自动列出）  
 * `repl` - 在所调试的脚本的上下文中，打开调试器的 repl 
+  
 ### 执行控制Execution control
 
 * `run` - 运行脚本 (开始调试的时候自动运行)
@@ -139,9 +140,9 @@ Node 的调试器不支持所有的命令，但是简单的步进和检查还是
 
 ## 高级应用Advanced Usage
 
-V8 调试器可以用两种方法启用和房屋，`--debug`命令启动调试，或向已经启动 Node 发送  `SIGUSR1`。
+V8 调试器可以用两种方法启用和访问，`--debug`命令启动调试，或向已经启动 Node 发送 `SIGUSR1`。
 
-一旦一个进程进入调试模式，它可以被 node 调试器连接。调试器可以通过`pid` 或  URI 来连接。
+一旦一个进程进入调试模式，它可以被 node 调试器连接。调试器可以通过`pid` 或 URI 来连接。
 
 * `node debug -p <pid>` - 通过 `pid` 连接进程
-* `node debug <URI>` - 通过 URI （比如localhost:5858） 连接进程
+* `node debug <URI>` - 通过 URI （比如localhost:5858） 连接进程w

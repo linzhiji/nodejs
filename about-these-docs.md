@@ -1,82 +1,58 @@
 # 关于本文档
 
 <!-- type=misc -->
+本文档从引用参考和概念两个方面全面的解释了 Node.js API。每个章节描述了一个模块或高级概念。
 
-The goal of this documentation is to comprehensively explain the Node.js
-API, both from a reference as well as a conceptual point of view.  Each
-section describes a built-in module or high-level concept.
+一般情况下，属性，方法参数，及事件都会列在主标题下的列表中。
 
-Where appropriate, property types, method arguments, and the arguments
-provided to event handlers are detailed in a list underneath the topic
-heading.
+每个 `.html` 文档都有对应的 `.json` ，它们包含相同的结构化内容。这些东西目前还是实验性的，主要为各种集成开发环境（IDE）和开发工具提供便利。
 
-Every `.html` document has a corresponding `.json` document presenting
-the same information in a structured manner.  This feature is
-experimental, and added for the benefit of IDEs and other utilities that
-wish to do programmatic things with the documentation.
+每个 `.html` 和 `.json` 文件都和 `doc/api/` 目录下的 `.markdown` 文件相对应。这些文档使用 `tools/doc/generate.js` 程序生成。 HTML 模板位于 `doc/template.html`。
 
-Every `.html` and `.json` file is generated based on the corresponding
-`.markdown` file in the `doc/api/` folder in node's source tree.  The
-documentation is generated using the `tools/doc/generate.js` program.
-The HTML template is located at `doc/template.html`.
-
-## Stability Index
+## 稳定性标志
 
 <!--type=misc-->
 
-Throughout the documentation, you will see indications of a section's
-stability.  The Node.js API is still somewhat changing, and as it
-matures, certain parts are more reliable than others.  Some are so
-proven, and so relied upon, that they are unlikely to ever change at
-all.  Others are brand new and experimental, or known to be hazardous
-and in the process of being redesigned.
+在文档中，你会看到每个章节的稳定性标志。Node.js API 还在改进中，成熟的部分会比其他章节值得信赖。经过大量验证和依赖的 API 是一般是不会变的。其他新增的，试验性的，或被证明具有危险性的部分正重新设计。
 
-The stability indices are as follows:
+稳定性标志包括以下内容:
 
 ```
-Stability: 0 - Deprecated
-This feature is known to be problematic, and changes are
-planned.  Do not rely on it.  Use of the feature may cause warnings.  Backwards
-compatibility should not be expected.
+稳定性（Stability）: 0 - 抛弃
+这部分内容有问题，并已计划改变。不要使用这些内容，可能会引起警告。不要想什么向后兼容性了。
 ```
 
 ```
-Stability: 1 - Experimental
-This feature was introduced recently, and may change
-or be removed in future versions.  Please try it out and provide feedback.
-If it addresses a use-case that is important to you, tell the node core team.
+稳定性（Stability）: 1 - 试验
+这部分内容最近刚引进，将来的版本可能会改变也可能会被移除。你可以试试并提供反馈。如果你用到的部分对你来说非常重要，可以告诉 node 的核心团队。
 ```
 
 ```
-Stability: 2 - Unstable
-The API is in the process of settling, but has not yet had
-sufficient real-world testing to be considered stable. Backwards-compatibility
-will be maintained if reasonable.
+稳定性（Stability）: 2 - 不稳定
+这部分 API 正在调整中，还没在实际工作测试中达到满意的程度。如果合理的话会保证向后兼容性。
 ```
 
 ```
-Stability: 3 - Stable
-The API has proven satisfactory, but cleanup in the underlying
-code may cause minor changes.  Backwards-compatibility is guaranteed.
+稳定性（Stability）: 3 - 稳定
+这部分 API 验证过基本能令人满意，但是清理底层代码时可能会引起小的改变。保证向后的兼容性。
 ```
 
 ```
-Stability: 4 - API Frozen
-This API has been tested extensively in production and is
-unlikely to ever have to change.
+稳定性（Stability）: 4 - API 冻结
+这部分的 API 已经在产品中广泛试验，不太可能被改变。
 ```
 
 ```
-Stability: 5 - Locked
-Unless serious bugs are found, this code will not ever
-change.  Please do not suggest changes in this area; they will be refused.
+稳定性（Stability）: 5 - 锁定
+除非发现了严重 bug，否则这部分代码永远不会改变。请不要对这部分内容提出更改建议，否则会被拒绝。
+
 ```
 
-## JSON Output
+## JSON 输出
 
-    Stability: 1 - Experimental
+    稳定性（Stability）: 1 - 试验
 
-Every HTML file in the markdown has a corresponding JSON file with the
-same data.
+每个通过 markdown 生成的 HTML 文件都有相应的 JSON 文件。
 
-This feature is new as of node v0.6.12.  It is experimental.
+这个特性从 v0.6.12 开始,是试验性功能。
+
